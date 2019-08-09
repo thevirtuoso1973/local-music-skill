@@ -1,0 +1,9 @@
+ dependencies:
+   # Pip dependencies on PyPI
+   python:
+     - os
+     - time
+
+   skills:
+     - mycroft-playback-control
+
