@@ -2,9 +2,10 @@
 # the LICENSE file for more information.
 
 from mycroft.skills.common_play_skill import CommonPlaySkill, CPSMatchLevel
+from mycroft.audio import wait_while_speaking
 
+import random
 import os
-import time
 
 class LocalMusic(CommonPlaySkill):
     def CPS_match_query_phrase(self, phrase):
@@ -18,30 +19,45 @@ class LocalMusic(CommonPlaySkill):
                         (dict) optional data)
                  or None if no match found.
         """
-        path = os.path.join(os.path.expanduser("~"), "Music", "Tomb-Mold-Manor-Of-Infinite-Forms.mp3")
-        return (phrase, CPSMatchLevel.CATEGORY, {"Tomb-Mold-Manor-Of-Infinite-Forms": path}) if phrase=="metal" else None
+        musicPath = os.path.join(os.path.expanduser("~"), "Music")
+        if phrase == "any song":
+            songs = []
+            for (dirpath, dirnames, songnames) in os.walk(musicPath):
+                validSongs = [song for song in songnames if song[-4:] == ".mp3"]
+                if validSongs:
+                    songs.append((dirpath, validSongs))
+            level = random.randint(0, len(songs)-1)
+            choice = random.randint(0, len(songs[level][1])-1)
+            songName = songs[level][1][choice]
+            return (phrase, CPSMatchLevel.GENERIC, {songName:os.path.join(songs[level][0], songName)})
+
+        return None
 
     def CPS_start(self, phrase, data):
         """
         Starts playback.
         Called if this skill has best match.
         """
-        options = list(data.keys())
-        name = options[0]
-        url = data[name]
-        self.speak_dialog("play", data={"song":name})
-        time.sleep(4)
-        self.audioservice.play(url)
+        if len(data) == 1:
+            name = list(data.keys())[0]
+            url = data[name]
+            self.speak_dialog("play", data={"song":name})
+            wait_while_speaking()
+            self.audioservice.play(url)
+        #options = list(data.keys())
+        #name = options[0]
+        #url = data[name]
+        #self.speak_dialog("play", data={"song":name})
+        #wait_while_speaking()
+        #self.audioservice.play(url)
 
 
     # The "stop" method defines what Mycroft does when told to stop during
-    # the skill's execution. In this case, since the skill's functionality
-    # is extremely simple, there is no need to override it.  If you DO
-    # need to implement stop, you should return True to indicate you handled
-    # it.
-    #
-    # def stop(self):
-    #    return False
+    # the skill's execution. Returns True to show successfully handled stop.
+    def stop(self):
+        self.audioservice.stop()
+        self.speak_dialog("stop")
+        return True
 
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.

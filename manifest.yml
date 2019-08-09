@@ -2,7 +2,7 @@
    # Pip dependencies on PyPI
    python:
      - os
-     - time
+     - random
 
    skills:
      - mycroft-playback-control
