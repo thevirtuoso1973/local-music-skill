@@ -30,7 +30,7 @@ class LocalMusic(CommonPlaySkill):
         name = options[0]
         url = data[name]
         self.speak_dialog("play", data={"song":name})
-        time.sleep(1.5)
+        time.sleep(4)
         self.audioservice.play(url)
 
 
