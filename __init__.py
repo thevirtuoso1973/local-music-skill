@@ -8,6 +8,10 @@ import random
 import os
 
 class LocalMusic(CommonPlaySkill):
+    def __init__(self):
+        super(LocalMusic, self).__init__(name="LocalMusic")
+        self.playing = False
+
     def CPS_match_query_phrase(self, phrase):
         """
         This method checks if phrase is valid song to play.
@@ -55,9 +59,11 @@ class LocalMusic(CommonPlaySkill):
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. Returns True to show successfully handled stop.
     def stop(self):
-        self.audioservice.stop()
-        self.speak_dialog("stop")
-        return True
+        if self.playing == True:
+            self.audioservice.stop()
+            self.speak_dialog("stop")
+            return True
+        return False
 
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
