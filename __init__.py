@@ -42,12 +42,12 @@ class LocalMusic(CommonPlaySkill):
             maxConfIndex = 0
             maxConf = -1
             for index, tup in enumerate(songs):
-                match, confidence = match_one(phrase, tup[1])
+                match, confidence = match_one(phrase, [song[:-4] for song in tup[1]])
                 if confidence > maxConf:
                     maxConf = confidence
                     maxConfIndex = index
                     actualMatch = match
-            if confidence > 0.5:
+            if maxConf > 0.5:
                 return (phrase, CPSMatchLevel.TITLE, {actualMatch:os.path.join(songs[maxConfIndex][0], actualMatch)})
 
         return None
