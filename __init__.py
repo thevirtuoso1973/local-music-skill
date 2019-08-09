@@ -3,6 +3,8 @@
 
 from mycroft.util.parse import match_one
 from mycroft.skills.common_play_skill import CommonPlaySkill, CPSMatchLevel
+from mycroft import intent_handler
+from adapt.intent import IntentBuilder
 from mycroft.audio import wait_while_speaking
 
 import random
@@ -71,6 +73,20 @@ class LocalMusic(CommonPlaySkill):
         #wait_while_speaking()
         #self.audioservice.play(url)
 
+    @intent_handler(IntentBuilder('PauseIntent').require('PauseKeyword'))
+    def handle_pause_intent(self, message):
+        if self.playing == True:
+            self.audioservice.pause()
+            self.speak_dialog("pause")
+            self.playing = False
+
+    @intent_handler(IntentBuilder('ResumeIntent').require('ResumeKeyword'))
+    def handle_resume_intent(self, message):
+        if self.playing == False:
+            self.speak_dialog("resume")
+            wait_while_speaking()
+            self.audioservice.resume()
+            self.playing = True
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. Returns True to show successfully handled stop.
