@@ -18,14 +18,17 @@ class LocalMusic(CommonPlaySkill):
                  or None if no match found.
         """
         path = os.path.join(os.path.expanduser("~"), "Music", "Tomb-Mold-Manor-Of-Infinite-Forms.mp3")
-        return (phrase, CPSMatchLevel.CATEGORY, {"Tomb Mold": path}) if phrase=="metal" else None
+        return (phrase, CPSMatchLevel.CATEGORY, {"Tomb-Mold-Manor-Of-Infinite-Forms": path}) if phrase=="metal" else None
 
     def CPS_start(self, phrase, data):
         """
         Starts playback.
         Called if this skill has best match.
         """
-        url = list(data.values())[0]
+        options = list(data.keys())
+        name = options[0]
+        url = data[name]
+        self.speak_dialog("play", data={"song":name})
         self.audioservice.play(url)
 
 
