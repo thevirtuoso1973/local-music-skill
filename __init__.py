@@ -34,7 +34,7 @@ class LocalMusic(CommonPlaySkill):
             if validSongs:
                 songs.append((dirpath, validSongs))
         if phrase in ("any song", "another song"): # then randomly choose a song
-                        level = random.randint(0, len(songs)-1)
+            level = random.randint(0, len(songs)-1)
             choice = random.randint(0, len(songs[level][1])-1)
             songName = songs[level][1][choice]
             return (phrase, CPSMatchLevel.GENERIC, {songName:os.path.join(songs[level][0], songName)})
@@ -47,8 +47,8 @@ class LocalMusic(CommonPlaySkill):
                     maxConf = confidence
                     maxConfIndex = index
                     actualMatch = match
-           if confidence > 0.5:
-               return (phrase, CPSMatchLevel.TITLE, {actualMatch:os.path.join(songs[maxConfIndex][0], actualMatch)})
+            if confidence > 0.5:
+                return (phrase, CPSMatchLevel.TITLE, {actualMatch:os.path.join(songs[maxConfIndex][0], actualMatch)})
 
         return None
 
