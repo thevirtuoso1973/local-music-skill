@@ -48,6 +48,7 @@ class LocalMusic(CommonPlaySkill):
             self.speak_dialog("play", data={"song":name})
             wait_while_speaking()
             self.audioservice.play(url)
+            self.playing = True
         #options = list(data.keys())
         #name = options[0]
         #url = data[name]
@@ -62,6 +63,7 @@ class LocalMusic(CommonPlaySkill):
         if self.playing == True:
             self.audioservice.stop()
             self.speak_dialog("stop")
+            self.playing = False
             return True
         return False
 
