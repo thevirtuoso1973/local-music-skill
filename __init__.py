@@ -48,7 +48,7 @@ class LocalMusic(CommonPlaySkill):
                     maxConfIndex = index
                     actualMatch = match
             if maxConf > 0.5:
-                return (phrase, CPSMatchLevel.TITLE, {actualMatch:os.path.join(songs[maxConfIndex][0], actualMatch)})
+                return (phrase, CPSMatchLevel.TITLE, {actualMatch:os.path.join(songs[maxConfIndex][0], actualMatch+".mp3")})
 
         return None
 
