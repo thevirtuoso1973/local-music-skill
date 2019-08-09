@@ -4,6 +4,7 @@
 from mycroft.skills.common_play_skill import CommonPlaySkill, CPSMatchLevel
 
 import os
+import time
 
 class LocalMusic(CommonPlaySkill):
     def CPS_match_query_phrase(self, phrase):
@@ -29,6 +30,7 @@ class LocalMusic(CommonPlaySkill):
         name = options[0]
         url = data[name]
         self.speak_dialog("play", data={"song":name})
+        time.sleep(1.5)
         self.audioservice.play(url)
 
 
