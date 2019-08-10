@@ -74,7 +74,7 @@ class LocalMusic(CommonPlaySkill):
         Called if this skill has best match.
         """
         if self.playing:
-            stop()
+            self.stop()
         name = list(data.keys())[0]
         url = data[name]
         self.speak_dialog("play", data={"song":name})
