@@ -73,6 +73,8 @@ class LocalMusic(CommonPlaySkill):
         Starts playback.
         Called if this skill has best match.
         """
+        if self.playing:
+            stop()
         name = list(data.keys())[0]
         url = data[name]
         self.speak_dialog("play", data={"song":name})
@@ -82,14 +84,14 @@ class LocalMusic(CommonPlaySkill):
 
     @intent_handler(IntentBuilder('PauseIntent').require('PauseKeyword'))
     def handle_pause_intent(self, message):
-        if self.playing == True:
+        if self.playing:
             self.audioservice.pause()
             self.speak_dialog("pause")
             self.playing = False
 
     @intent_handler(IntentBuilder('ResumeIntent').require('ResumeKeyword'))
     def handle_resume_intent(self, message):
-        if self.playing == False:
+        if not self.playing:
             self.speak_dialog("resume")
             wait_while_speaking()
             self.audioservice.resume()
@@ -97,7 +99,7 @@ class LocalMusic(CommonPlaySkill):
 
     @intent_handler(IntentBuilder('NextSongIntent').require('NextKeyword'))
     def handle_nextSong_intent(self, message):
-        if self.playing == True:
+        if self.playing:
             self.audioservice.pause()
             self.speak_dialog("next")
             wait_while_speaking()
@@ -105,7 +107,7 @@ class LocalMusic(CommonPlaySkill):
 
     @intent_handler(IntentBuilder('PrevSongIntent').require('PrevKeyword'))
     def handle_prevSong_intent(self, message):
-        if self.playing == True:
+        if self.playing:
             self.audioservice.pause()
             self.speak_dialog("prev")
             wait_while_speaking()
