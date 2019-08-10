@@ -43,14 +43,28 @@ class LocalMusic(CommonPlaySkill):
         else:
             maxConfIndex = 0
             maxConf = -1
+            tlDir = len(songs[0][0])+1
+            album = False
             for index, tup in enumerate(songs):
+                if index > 0:
+                    albumName = tup[0][tlDir:]
+                    match, confidence = match_one(phrase, [albumName])
+                    if confidence > maxConf:
+                        maxConf = confidence
+                        maxConfIndex = index
+                        actualMatch = match
+                        album = True
                 match, confidence = match_one(phrase, [song[:-4] for song in tup[1]])
                 if confidence > maxConf:
                     maxConf = confidence
                     maxConfIndex = index
                     actualMatch = match
-            if maxConf > 0.5:
+                    album = False
+            if maxConf > 0.5 and not album:
                 return (phrase, CPSMatchLevel.TITLE, {actualMatch:os.path.join(songs[maxConfIndex][0], actualMatch+".mp3")})
+            elif maxConf > 0.5:
+                return (phrase, CPSMatchLevel.TITLE,
+                        {actualMatch:[os.path.join(songs[maxConfIndex][0], song) for song in songs[maxConfIndex][1]]})
 
         return None
 
@@ -59,19 +73,12 @@ class LocalMusic(CommonPlaySkill):
         Starts playback.
         Called if this skill has best match.
         """
-        if len(data) == 1:
-            name = list(data.keys())[0]
-            url = data[name]
-            self.speak_dialog("play", data={"song":name})
-            wait_while_speaking()
-            self.audioservice.play(url)
-            self.playing = True
-        #options = list(data.keys())
-        #name = options[0]
-        #url = data[name]
-        #self.speak_dialog("play", data={"song":name})
-        #wait_while_speaking()
-        #self.audioservice.play(url)
+        name = list(data.keys())[0]
+        url = data[name]
+        self.speak_dialog("play", data={"song":name})
+        wait_while_speaking()
+        self.audioservice.play(url)
+        self.playing = True
 
     @intent_handler(IntentBuilder('PauseIntent').require('PauseKeyword'))
     def handle_pause_intent(self, message):
