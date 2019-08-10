@@ -95,6 +95,22 @@ class LocalMusic(CommonPlaySkill):
             self.audioservice.resume()
             self.playing = True
 
+    @intent_handler(IntentBuilder('NextSongIntent').require('NextKeyword'))
+    def handle_nextSong_intent(self, message):
+        if self.playing == True:
+            self.audioservice.pause()
+            self.speak_dialog("next")
+            wait_while_speaking()
+            self.audioservice.next()
+
+    @intent_handler(IntentBuilder('PrevSongIntent').require('PrevKeyword'))
+    def handle_prevSong_intent(self, message):
+        if self.playing == True:
+            self.audioservice.pause()
+            self.speak_dialog("prev")
+            wait_while_speaking()
+            self.audioservice.prev()
+
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. Returns True to show successfully handled stop.
     def stop(self):
