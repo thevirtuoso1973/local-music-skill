@@ -10,6 +10,7 @@ from mycroft.audio import wait_while_speaking
 import random
 import os
 
+
 class LocalMusic(CommonPlaySkill):
     def __init__(self):
         """
@@ -35,11 +36,13 @@ class LocalMusic(CommonPlaySkill):
             validSongs = [song for song in songnames if song[-4:] == ".mp3"]
             if validSongs:
                 songs.append((dirpath, validSongs))
-        if phrase in ("any song", "another song"): # then randomly choose a song
+        if phrase in ("any song",
+                      "another song"):  # then randomly choose a song
             level = random.randint(0, len(songs)-1)
             choice = random.randint(0, len(songs[level][1])-1)
             songName = songs[level][1][choice]
-            return (phrase, CPSMatchLevel.GENERIC, {songName:os.path.join(songs[level][0], songName)})
+            return (phrase, CPSMatchLevel.GENERIC,
+                    {songName: os.path.join(songs[level][0], songName)})
         else:
             maxConfIndex = 0
             maxConf = -1
@@ -54,17 +57,30 @@ class LocalMusic(CommonPlaySkill):
                         maxConfIndex = index
                         actualMatch = match
                         album = True
-                match, confidence = match_one(phrase, [song[:-4] for song in tup[1]])
+                match, confidence = match_one(
+                                    phrase,
+                                    [song[:-4] for song in tup[1]]
+                                    )
                 if confidence > maxConf:
                     maxConf = confidence
                     maxConfIndex = index
                     actualMatch = match
                     album = False
             if maxConf > 0.5 and not album:
-                return (phrase, CPSMatchLevel.TITLE, {actualMatch:os.path.join(songs[maxConfIndex][0], actualMatch+".mp3")})
+                return (phrase,
+                        CPSMatchLevel.TITLE,
+                        {actualMatch:
+                         os.path.join(
+                             songs[maxConfIndex][0], actualMatch+".mp3"
+                             )})
             elif maxConf > 0.5:
-                return (phrase, CPSMatchLevel.TITLE,
-                        {actualMatch:sorted([os.path.join(songs[maxConfIndex][0], song) for song in songs[maxConfIndex][1]])})
+                return (phrase,
+                        CPSMatchLevel.TITLE,
+                        {actualMatch:
+                         sorted(
+                             [os.path.join(songs[maxConfIndex][0], song)
+                                 for song in songs[maxConfIndex][1]]
+                             )})
 
         return None
 
@@ -77,7 +93,7 @@ class LocalMusic(CommonPlaySkill):
             self.stop()
         name = list(data.keys())[0]
         url = data[name]
-        self.speak_dialog("play", data={"song":name})
+        self.speak_dialog("play", data={"song": name})
         wait_while_speaking()
         self.audioservice.play(url)
         self.playing = True
@@ -119,15 +135,15 @@ class LocalMusic(CommonPlaySkill):
         """
         This skill handles stop if a track is playing.
         """
-        if self.playing == True:
+        if self.playing:
             self.audioservice.stop()
             self.speak_dialog("stop")
             self.playing = False
             return True
         return False
 
+
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
 def create_skill():
     return LocalMusic()
-
