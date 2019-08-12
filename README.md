@@ -1,7 +1,7 @@
-# Local Music Player (Skill)
+# <img src='https://raw.githack.com/FortAwesome/Font-Awesome/master/svgs/solid/music.svg' card_color='#42ECE8' width='50' height='50' style='vertical-align:bottom'/> Local Music Player
 Play downloaded mp3 files on your `~/Music` path with MycroftAI on Linux.
 
-# About
+## About
 This is a 'skill'/add-on for the MycroftAI assistant that lets you play mp3 files on your computer.
 
 Mycroft currently looks through the files in `~/Music` (`/home/Music`) path to see if the song mentioned is present.
@@ -11,18 +11,25 @@ It compares the filenames to the user's request and plays the matching song, if 
 
 N.B. you can put a bunch of mp3 files in a folder and ask it to play _folder name_ and it'll play all the songs in that folder. Great for albums!
 
-# Example use
-"Play Money by Pink Floyd"
+## Examples
+* "Play Money by Pink Floyd"
+* "Pause"
+* "Resume"
 
-"Play Dark Side of the Moon"
+## Credits
+@thevirtuoso1973
 
-"Pause"
+## Supported Devices 
+platform_picroft platform_plasmoid 
 
-"Resume"
+## Category
+Entertainment
+IoT
+**Music**
+Media
 
-"Next song"
-
-"Stop playing"
-
-# Credits
-_thevirtuoso1973 (Me)_
+## Tags
+#music
+#linux
+#listen
+#downloaded
