@@ -1,6 +1,3 @@
-# TODO: Add an appropriate license to your skill before publishing.  See
-# the LICENSE file for more information.
-
 from mycroft.util.parse import match_one
 from mycroft.skills.common_play_skill import CommonPlaySkill, CPSMatchLevel
 from mycroft import intent_handler
